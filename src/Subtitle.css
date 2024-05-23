@@ -1,0 +1,12 @@
+/* src/components/Subtitle.css */
+
+
+.subtitle {
+  position: absolute;
+  bottom: 10%;
+  width: 100%;
+  text-align: center;
+  font-size: 44px;
+  color: white;
+ 
+}
