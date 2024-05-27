@@ -41,3 +41,12 @@ The processed video is stored in the `VideoOutput` directory with the correspond
 ## Themes
 
 The `themes` folder contains predefined themes for the application. These themes can be customized and applied to the video for different visual effects.
+
+
+## Examples
+
+The `Video` examples are present in `frontend/public`.
+
+The `Transcription` examples are:
+- For the first video: `transcription.json` located in `frontend/src/`
+- For the second video: `transcription2.json` located in `frontend/src/`

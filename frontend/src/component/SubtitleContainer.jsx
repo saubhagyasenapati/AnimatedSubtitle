@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import SubtitleRender from "./SubtitleRender";
 import "../App.css";
-import transcription from "../assets/transcription2.json";
+import transcription from "../assets/transcription.json";
 
 const themes = ["theme1", "theme2", "theme3", "theme4"];
 

@@ -116,7 +116,10 @@ export async function renderSubtitles(videoMetadata, videoPath, transcription, v
 export function combineFramesIntoVideo(videoPath, videoId) {
     return new Promise((resolve, reject) => {
         console.log('Combining frames into video using FFmpeg...');
-
+        const Directory = `VideoOutput`;
+        if (!fs.existsSync(Directory)) {
+            fs.mkdirSync(Directory, { recursive: true }); 
+        }
         // Get the current date and time
         const now = new Date();
         const formattedDateTime = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}_${now.getHours().toString().padStart(2, '0')}.${now.getMinutes().toString().padStart(2, '0')}`;

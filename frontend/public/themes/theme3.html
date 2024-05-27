@@ -19,33 +19,21 @@
             font-size: 70px;
             font-weight: 900;
             text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
-            animation: fadeInZoom 3s ease-in-out;
+            animation: slide 3s ease-in-out;
+            position: absolute;
+            bottom: -10%;
+            height: 100%;
         }
         .subtitle-text {
             -webkit-text-stroke: 1.5px black;
             text-shadow: 0 0 4px white;
-            color: green;
+            color:green;
         }
-        @keyframes fadeInZoom {
-            0% {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-            20% {
-                opacity: 1;
-                transform: scale(1.1);
-            }
-            40% {
-                transform: scale(1);
-            }
-            80% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: scale(0.5);
-            }
+        @keyframes slide {
+            0% { bottom: -10%; opacity: 0; }
+            10% { bottom: 10%; opacity: 1; }
+            90% { bottom: 10%; opacity: 1; }
+            100% { bottom: -10%; opacity: 0; }
         }
     </style>
 </head>
