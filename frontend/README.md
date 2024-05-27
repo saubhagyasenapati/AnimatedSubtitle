@@ -1,8 +1,43 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Animated Subtitle
+## Project Structure
 
-Currently, two official plugins are available:
+This project consists of two main folders: Backend and Frontend.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Frontend Setup
+
+To run the frontend part of the application, follow these steps:
+
+1. Navigate to the `frontend` directory:
+    ```bash
+    cd frontend
+    ```
+
+2. Start the development server:
+    ```bash
+    npm run dev
+    ```
+
+## Backend Setup
+
+To run the backend part of the application, follow these steps:
+
+1. Navigate to the `backend/src` directory:
+    ```bash
+    cd backend/src
+    ```
+
+2. Start the backend server:
+    ```bash
+    node server.js
+    ```
+
+### Image Processing and Video Generation
+
+In the backend, processed images with screenshots are saved in the `frames/videoId` directory. These processed images are then overlaid on the original video to create animated subtitles.
+
+The processed video is stored in the `VideoOutput` directory with the corresponding VideoId.
+
+## Themes
+
+The `themes` folder contains predefined themes for the application. These themes can be customized and applied to the video for different visual effects.
