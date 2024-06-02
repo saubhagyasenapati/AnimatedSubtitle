@@ -5,6 +5,9 @@
     <title>Subtitle Frame</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
+       :root {
+       /* CSS_VARIABLES */
+        }
         body {
             margin: 0;
             padding: 0;
@@ -16,23 +19,23 @@
             background: transparent;
         }
         .subtitle {
-            font-size: 70px;
+            font-size: var(--font-size);
             font-weight: 900;
             text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
-            animation: slide 3s ease-in-out;
+            animation: slide var(--animation-duration) ease-in-out;
             position: absolute;
-            bottom: -10%;
+            bottom: var(--y-position-start);
         }
         .subtitle-text {
             -webkit-text-stroke: 1.5px black;
-            text-shadow: 0 0 4px white;
-            color:green;
+            text-shadow: 0 0 4px var(--highlight-color);
+            color: var(--primary-color);
         }
         @keyframes slide {
-            0% { bottom: -10%; opacity: 0; }
-            10% { bottom: 10%; opacity: 1; }
-            90% { bottom: 10%; opacity: 1; }
-            100% { bottom: -10%; opacity: 0; }
+            0% { bottom: var(--y-position-start); opacity: 0; }
+            10% { bottom: var(--y-position-end); opacity: 1; }
+            90% { bottom: var(--y-position-end); opacity: 1; }
+            100% { bottom: var(--y-position-start); opacity: 0; }
         }
     </style>
 </head>

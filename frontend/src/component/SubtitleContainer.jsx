@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import SubtitleRender from "./SubtitleRender";
 import "../App.css";
-import transcription from "../assets/transcription2.json";
+import transcription from "../assets/transcription.json";
 
 const themes = ["theme1", "theme2", "theme3", "theme4"];
 
@@ -60,7 +60,7 @@ const SubtitleContainer = () => {
       }
     );
     formData.append("transcription", transcriptionFile);
-
+  
     try {
       const response = await fetch("http://localhost:3001/apply-caption", {
         method: "POST",
@@ -70,17 +70,23 @@ const SubtitleContainer = () => {
         const data = await response.json();
         setUploadedVideoUrl(data.url);
         setCaptionApplied(true);
-        setLoading(false);
       } else {
         // Handle caption application error
+        console.error("Caption application failed:", response.statusText);
       }
     } catch (error) {
+      // Handle fetch error
       console.error("Error applying caption:", error);
+    } finally {
+      // Always set loading state to false after request completes
+      setLoading(false);
     }
   };
+  
 
   const handleCancel = () => {
     setFile(null);
+    setLoading(false);
     setUploadedVideoUrl("");
     setCaptionApplied(false);
   };

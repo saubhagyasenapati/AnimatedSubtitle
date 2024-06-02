@@ -17,7 +17,7 @@ export function getVideoMetadata(videoPath) {
             const durationMatch = stdout.match(/Duration: (\d+):(\d+):(\d+\.\d+)/);
             const fpsMatch = stdout.match(/(\d+(\.\d+)?) fps/);
             const resolutionMatch = stdout.match(/, (\d+)x(\d+)/);
-
+             console.log(resolutionMatch);
             if (durationMatch && fpsMatch && resolutionMatch) {
                 const hours = parseFloat(durationMatch[1]);
                 const minutes = parseFloat(durationMatch[2]);
@@ -26,7 +26,7 @@ export function getVideoMetadata(videoPath) {
                 const frameRate = parseFloat(fpsMatch[1]);
                 const width = parseInt(resolutionMatch[1]);
                 const height = parseInt(resolutionMatch[2]);
-            console.log('FrameRate',frameRate,'Duration',duration);
+            console.log('FrameRate',frameRate,'Duration',duration,"WidthHeight",width,height);
                 resolve({ duration, frameRate, width, height });
             } else {
                 reject('Failed to parse video metadata');

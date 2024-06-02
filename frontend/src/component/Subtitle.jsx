@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const Subtitle = ({ content, startTime, endTime, currentTime, currentIndex, theme, dimensions, primaryColor, secondaryColor, fontSize,yPosition}) => {
+const Subtitle = ({ content, startTime, endTime, currentTime, currentIndex, theme, dimensions, primaryColor, secondaryColor, fontSize, yPosition }) => {
   const [htmlContent, setHtmlContent] = useState('');
   const color = currentIndex % 2 === 0 ? primaryColor : secondaryColor;
   const duration = parseFloat(endTime) - parseFloat(startTime);
@@ -8,21 +8,26 @@ const Subtitle = ({ content, startTime, endTime, currentTime, currentIndex, them
   useEffect(() => {
     if (currentTime >= startTime && currentTime <= endTime) {
       fetch(`/themes/${theme}.html`)
-      .then(response => response.text())
-      .then(themeContent => {
-        const updatedContent = themeContent
-          .replace('--primary-color: green;', `--primary-color: ${primaryColor};`)
-          .replace('--secondary-color: yellow;', `--secondary-color: ${secondaryColor};`)
-          .replace('--font-size: 70px;', `--font-size: ${fontSize};`)
-          .replace('--y-position: 50%;', `--y-position: calc(50% + ${yPosition}px);`)
-          .replace('Placeholder',content);
-        setHtmlContent(updatedContent);
-      });
-    } else {
-        setHtmlContent(''); // Clear content when subtitle is not active
-    }
-}, [content, primaryColor, duration, theme, currentTime, startTime, endTime, fontSize, secondaryColor,yPosition]);
+        .then(response => response.text())
+        .then(themeContent => {
+          const cssVariables = `
+            --font-size: ${fontSize || '70px'};
+            --primary-color: ${primaryColor || 'green'};
+            --highlight-color: ${secondaryColor || 'yellow'};
+            --animation-duration: ${duration}s;
+            --y-position: ${yPosition !== undefined ? `calc(50% + ${yPosition}px)` : '50%'};
+          `;
 
+          const updatedContent = themeContent
+            .replace('/* CSS_VARIABLES */', cssVariables)
+            .replace('Placeholder', content);
+
+          setHtmlContent(updatedContent);
+        });
+    } else {
+      setHtmlContent(''); // Clear content when subtitle is not active
+    }
+  }, [content, primaryColor, secondaryColor, fontSize, yPosition, duration, theme, currentTime, startTime, endTime]);
 
   if (currentTime < startTime || currentTime > endTime) return null;
 

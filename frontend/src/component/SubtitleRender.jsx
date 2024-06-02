@@ -25,7 +25,7 @@ const SubtitleRender = ({ uploadedVideoUrl, captionApplied, transcription, theme
       });
     }
   };
-
+  console.log(videoDimensions);
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.addEventListener('loadedmetadata', handleLoadedMetadata);

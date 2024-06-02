@@ -10,8 +10,9 @@ lerna-debug.log*
 node_modules
 frontend/node_modules
 backend/node_modules
-backend/frames
+backend/src/frames
 backend/VideoOutput
+backend/src/VideoOutput
 dist
 dist-ssr
 *.local
