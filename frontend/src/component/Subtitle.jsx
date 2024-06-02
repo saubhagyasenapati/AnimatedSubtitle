@@ -1,25 +1,28 @@
 import React, { useEffect, useState } from 'react';
 
-const Subtitle = ({ content, startTime, endTime, currentTime, currentIndex, theme, dimensions }) => {
+const Subtitle = ({ content, startTime, endTime, currentTime, currentIndex, theme, dimensions, primaryColor, secondaryColor, fontSize,yPosition}) => {
   const [htmlContent, setHtmlContent] = useState('');
-  const color = currentIndex % 2 === 0 ? 'red' : 'yellow';
+  const color = currentIndex % 2 === 0 ? primaryColor : secondaryColor;
   const duration = parseFloat(endTime) - parseFloat(startTime);
 
   useEffect(() => {
     if (currentTime >= startTime && currentTime <= endTime) {
       fetch(`/themes/${theme}.html`)
-        .then(response => response.text())
-        .then(themeContent => {
-          const updatedContent = themeContent
-            .replace('Placeholder', content)
-            .replace('green', color)
-            .replace('3s', `${duration}s`);
-          setHtmlContent(updatedContent);
-        });
+      .then(response => response.text())
+      .then(themeContent => {
+        const updatedContent = themeContent
+          .replace('--primary-color: green;', `--primary-color: ${primaryColor};`)
+          .replace('--secondary-color: yellow;', `--secondary-color: ${secondaryColor};`)
+          .replace('--font-size: 70px;', `--font-size: ${fontSize};`)
+          .replace('--y-position: 50%;', `--y-position: calc(50% + ${yPosition}px);`)
+          .replace('Placeholder',content);
+        setHtmlContent(updatedContent);
+      });
     } else {
-      setHtmlContent(''); // Clear content when subtitle is not active
+        setHtmlContent(''); // Clear content when subtitle is not active
     }
-  }, [content, color, duration, theme, currentTime, startTime, endTime]);
+}, [content, primaryColor, duration, theme, currentTime, startTime, endTime, fontSize, secondaryColor,yPosition]);
+
 
   if (currentTime < startTime || currentTime > endTime) return null;
 

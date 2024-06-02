@@ -26,7 +26,7 @@ export function getVideoMetadata(videoPath) {
                 const frameRate = parseFloat(fpsMatch[1]);
                 const width = parseInt(resolutionMatch[1]);
                 const height = parseInt(resolutionMatch[2]);
-
+            console.log('FrameRate',frameRate,'Duration',duration);
                 resolve({ duration, frameRate, width, height });
             } else {
                 reject('Failed to parse video metadata');
@@ -35,34 +35,30 @@ export function getVideoMetadata(videoPath) {
     });
 }
 
-export async function renderSubtitles(videoMetadata, videoPath, transcription, videoId, themeName) {
+export async function renderSubtitles(videoMetadata, videoPath, transcription, videoId, themeName, fontSize, primaryColor, highlightColor,yPosition) {
     console.log('Rendering subtitles onto frames...');
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
-    // Ensure that the frames directory for the current videoId exists
     const framesDirectory = `frames/${videoId}`;
     if (!fs.existsSync(framesDirectory)) {
-        fs.mkdirSync(framesDirectory, { recursive: true }); // Create the directory recursively
+        fs.mkdirSync(framesDirectory, { recursive: true });
     }
 
-    // Load the selected theme
-    const themeFilePath = path.join('themes', `${themeName}.html`);
+    const themeFilePath = path.join('../themes', `${themeName}.html`);
     if (!fs.existsSync(themeFilePath)) {
         throw new Error(`Theme file ${themeName}.html does not exist`);
     }
-    const themeContent = fs.readFileSync(themeFilePath, 'utf-8');
+    let themeContent = fs.readFileSync(themeFilePath, 'utf-8');
 
     const { duration, frameRate, width, height } = videoMetadata;
     const totalFrames = duration * frameRate;
 
-    // Set viewport size based on video resolution
     await page.setViewport({ width, height });
 
-    // Generate a mapping of content to alternating colors
     const contentColors = {};
     let colorIndex = 0;
-    const colors = ['red', 'yellow']; // Add more colors if needed
+    const colors = ['red', 'yellow'];
     transcription.forEach((subtitle) => {
         if (!contentColors[subtitle.content]) {
             contentColors[subtitle.content] = colors[colorIndex];
@@ -85,24 +81,26 @@ export async function renderSubtitles(videoMetadata, videoPath, transcription, v
             subtitleEndFrame = Math.floor(parseFloat(currentSubtitle.end_time) * frameRate);
         }
 
-        // Assign color based on content
         const color = contentColors[currentSubtitle ? currentSubtitle.content : ''] || 'white';
-
-        // Calculate animation duration
         const animationDuration = currentSubtitle ? (parseFloat(currentSubtitle.end_time) - parseFloat(currentSubtitle.start_time)) : 3;
-
-        // Replace placeholder text in the theme content with the actual subtitle content
         const subtitleContent = (currentSubtitle && frameNumber >= subtitleStartFrame && frameNumber <= subtitleEndFrame)
             ? currentSubtitle.content
             : '';
-        const frameHtmlContent = themeContent.replace('Placeholder', subtitleContent).replace('green', color).replace('3s', `${animationDuration}s`);
+            const cssVariables = `
+            --font-size: ${fontSize || '70px'};
+            --primary-color: ${primaryColor || 'green'};
+            --highlight-color: ${highlightColor || 'white'};
+            --animation-duration: ${animationDuration}s;
+            --y-position: ${yPosition !== undefined ? `calc(50% + ${yPosition}px)` : '50%'};
+        `;
+        
+      
 
-        await page.setContent(frameHtmlContent);
+        themeContent = themeContent.replace('/* CSS_VARIABLES */', cssVariables);
 
-        // Capture screenshot of the page
+        await page.setContent(themeContent.replace('Placeholder', subtitleContent));
+ 
         const screenshot = await page.screenshot({ type: 'png', omitBackground: true });
-
-        // Save the screenshot as an image file in the directory with the videoId
         const frameFilePath = path.join(framesDirectory, `frame${frameNumber.toString().padStart(6, '0')}.png`);
         fs.writeFileSync(frameFilePath, screenshot);
 

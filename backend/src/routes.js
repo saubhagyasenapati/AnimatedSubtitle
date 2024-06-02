@@ -53,6 +53,11 @@ export const processVideo = async (req, res) => {
       return res.status(400).send('Video file not provided.');
     }
     const theme = fields.theme && fields.theme[0];
+    const primaryColor = fields.primaryColor && fields.primaryColor[0];
+    const secondaryColor = fields.secondaryColor && fields.secondaryColor[0];
+    const fontSize = fields.fontSize && fields.fontSize[0];
+    const yPosition=fields.yPosition && fields.yPosition[0];
+   
     console.log(fields);
     if (!theme) {
       return res.status(400).send('Theme not provided.');
@@ -72,7 +77,7 @@ export const processVideo = async (req, res) => {
       const videoMetadata = await getVideoMetadata(videoFile.path);
       const videoId = uuidv4();
       
-      await renderSubtitles(videoMetadata, videoFile.path, transcription, videoId, theme);
+      await renderSubtitles(videoMetadata, videoFile.path, transcription, videoId, theme,fontSize,primaryColor,secondaryColor,yPosition);
       const outputUrl = await combineFramesIntoVideo(videoFile.path, videoId);
       res.status(200).send({ url: outputUrl });
     } catch (error) {

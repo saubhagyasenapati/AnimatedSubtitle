@@ -4,7 +4,7 @@ import "../App.css";
 
 const themes = ["theme1", "theme2", "theme3", "theme4"];
 
-const SubtitleRender = ({ uploadedVideoUrl, captionApplied, transcription, theme }) => {
+const SubtitleRender = ({ uploadedVideoUrl, captionApplied, transcription, theme,primaryColor, secondaryColor, fontSize,yPosition}) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(-1);
   const videoRef = useRef(null);
@@ -17,12 +17,23 @@ const SubtitleRender = ({ uploadedVideoUrl, captionApplied, transcription, theme
     }
   };
 
-  useEffect(() => {
+  const handleLoadedMetadata = () => {
     if (videoRef.current) {
       setVideoDimensions({
         width: videoRef.current.videoWidth,
         height: videoRef.current.videoHeight,
       });
+    }
+  };
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.addEventListener('loadedmetadata', handleLoadedMetadata);
+      return () => {
+        if (videoRef.current) {
+          videoRef.current.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        }
+      };
     }
   }, [uploadedVideoUrl]);
 
@@ -38,7 +49,11 @@ const SubtitleRender = ({ uploadedVideoUrl, captionApplied, transcription, theme
   }, [currentTime, transcription]);
 
   return (
-    <div className="app-container" ref={containerRef} style={{ position: "relative", width: videoDimensions.width, height: videoDimensions.height }}>
+    <div
+      className="app-container"
+      ref={containerRef}
+      style={{ position: "relative", width: videoDimensions.width, height: videoDimensions.height }}
+    >
       <video
         className="video-player"
         src={uploadedVideoUrl}
@@ -46,7 +61,7 @@ const SubtitleRender = ({ uploadedVideoUrl, captionApplied, transcription, theme
         controls
         ref={videoRef}
         onTimeUpdate={handleTimeUpdate}
-       
+        style={{ width: '100%', height: '100%' }}
       ></video>
       {!captionApplied && currentSubtitleIndex !== -1 && (
         <Subtitle
@@ -57,6 +72,10 @@ const SubtitleRender = ({ uploadedVideoUrl, captionApplied, transcription, theme
           currentTime={currentTime}
           theme={theme}
           dimensions={videoDimensions}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+          fontSize={fontSize}
+          yPosition={yPosition}
         />
       )}
     </div>

@@ -1,7 +1,17 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <title>Subtitle Frame</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
+        :root {
+            --primary-color: green;
+            --highlight-color: white;
+            --font-size: 70px;
+            --animation-duration: 3s;
+            --y-position: 50%; /* Default center position */
+        }
         body {
             margin: 0;
             padding: 0;
@@ -13,16 +23,26 @@
             background: transparent;
         }
         .subtitle {
-            font-size: 70px;
+            font-size: var(--font-size);
             font-weight: 900;
             text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
-            animation: swing 3s ease-in-out;
+            animation: swing var(--animation-duration) ease-in-out;
             height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: transparent;
+            position: relative;
+            top: var(--y-position);
+            transform: translateY(-50%);
         }
         .subtitle-text {
             -webkit-text-stroke: 1.5px black;
-            text-shadow: 0 0 4px white;
-            color:green;
+            text-shadow: 0 0 4px var(--highlight-color);
+            color: var(--primary-color);
         }
         @keyframes swing {
             20% {

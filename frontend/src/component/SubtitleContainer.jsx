@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import SubtitleRender from "./SubtitleRender";
 import "../App.css";
-import transcription from "../assets/transcription.json";
+import transcription from "../assets/transcription2.json";
 
 const themes = ["theme1", "theme2", "theme3", "theme4"];
 
@@ -12,7 +12,11 @@ const SubtitleContainer = () => {
   const [uploadedVideoUrl, setUploadedVideoUrl] = useState("");
   const [file, setFile] = useState(null);
   const [captionApplied, setCaptionApplied] = useState(false);
-  const [theme, setTheme] = useState(themes[0]); // State to store the selected theme
+  const [theme, setTheme] = useState(themes[0]);
+  const [primaryColor, setPrimaryColor] = useState("#00FF00"); // Default green
+  const [secondaryColor, setSecondaryColor] = useState("#FFFF00"); // Default yellow
+  const [fontSize, setFontSize] = useState("70px");
+  const [yPosition, setYPosition] = useState("0"); // Default center
   const videoRef = useRef(null);
 
   const handleTimeUpdate = () => {
@@ -42,7 +46,11 @@ const SubtitleContainer = () => {
   const handleApplyCaption = async () => {
     const formData = new FormData();
     formData.append("video", file);
-    formData.append("theme", theme); // Include selected theme in form data
+    formData.append("theme", theme);
+    formData.append("primaryColor", primaryColor);
+    formData.append("secondaryColor", secondaryColor);
+    formData.append("fontSize", fontSize);
+    formData.append("yPosition", yPosition);
     setLoading(true);
     const transcriptionFile = new File(
       [JSON.stringify(transcription)],
@@ -82,28 +90,78 @@ const SubtitleContainer = () => {
       <div className="video-container">
         <div className="theme-selection">
           <div>Select Theme:</div>
+          <select
+            className="theme-select"
+            value={theme}
+            onChange={(e) => setTheme(e.target.value)}
+          >
+            {themes.map((theme) => (
+              <option key={theme} value={theme}>
+                {theme}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="color-selection">
           <div>
-            <select
-              className="theme-select"
-              value={theme}
-              onChange={(e) => setTheme(e.target.value)}
-            >
-              {themes.map((theme) => (
-                <option key={theme} value={theme}>
-                  {theme}
-                </option>
-              ))}
-            </select>
+            <label htmlFor="primary-color">Primary Color:</label>
+            <input
+              type="color"
+              id="primary-color"
+              value={primaryColor}
+              onChange={(e) => setPrimaryColor(e.target.value)}
+            />
           </div>
+          <div>
+            <label htmlFor="secondary-color">Secondary Color:</label>
+            <input
+              type="color"
+              id="secondary-color"
+              value={secondaryColor}
+              onChange={(e) => setSecondaryColor(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="font-size-selection">
+          <label htmlFor="font-size">Font Size:</label>
+          <input
+            type="text"
+            id="font-size"
+            value={fontSize}
+            onChange={(e) => setFontSize(e.target.value)}
+          />
+        </div>
+
+        <div className="y-position-selection">
+          <label htmlFor="y-position">Vertical Position:</label>
+          <input
+            type="number"
+            id="y-position"
+            value={yPosition}
+            onChange={(e) => setYPosition(e.target.value)}
+          />
         </div>
 
         {!uploadedVideoUrl && (
           <div className="file-upload">
-            <input type="file" onChange={handleFileUpload}  />
+            <input type="file" onChange={handleFileUpload} />
           </div>
         )}
 
-        {uploadedVideoUrl && <SubtitleRender transcription={transcription} uploadedVideoUrl={uploadedVideoUrl} theme={theme} captionApplied={captionApplied}/>}
+        {uploadedVideoUrl && (
+          <SubtitleRender
+            transcription={transcription}
+            uploadedVideoUrl={uploadedVideoUrl}
+            theme={theme}
+            primaryColor={primaryColor}
+            secondaryColor={secondaryColor}
+            fontSize={fontSize}
+            yPosition={yPosition}
+            captionApplied={captionApplied}
+          />
+        )}
 
         <div className="button-container">
           <button

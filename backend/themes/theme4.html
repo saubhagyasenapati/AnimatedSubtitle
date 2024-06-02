@@ -13,24 +13,35 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: transparent;
         }
         .subtitle {
             font-size: 70px;
             font-weight: 900;
-            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
-            animation: zoom 3s ease-in-out;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: fadeInOut 6s ease-in-out;
         }
         .subtitle-text {
             -webkit-text-stroke: 1.5px black;
             text-shadow: 0 0 4px white;
-            color:green;
+            color: green;
         }
-        @keyframes zoom {
-            0% { transform: scale(0); opacity: 0; }
-            10% { transform: scale(1); opacity: 1; }
-            90% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(0); opacity: 0; }
+        @keyframes fadeInOut {
+            0% { 
+                transform: scale(0.8); 
+                opacity: 0; 
+            }
+            10% { 
+                transform: scale(1); 
+                opacity: 1; 
+            }
+            90% { 
+                transform: scale(1); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: scale(0.8); 
+                opacity: 0; 
+            }
         }
     </style>
 </head>
